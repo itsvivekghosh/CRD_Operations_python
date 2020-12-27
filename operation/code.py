@@ -6,42 +6,45 @@ import time
 keys = dict()  # 'keys' is the dictionary in which we store data
 
 
-def create(key, value, timeout=0):
-    '''
-    for create operation
-    use function create(key_name, value, timeout_value)
-    Here, the timeout value is optional to use
-    '''
-    if key in keys:
-        print("Error: The Key already exists")  # error message1
-
-    else:
-
-        if(key.isalpha()):
-
-            # constraints for file size less than 1.0GB and JSON object value less than 16KB
-            if len(keys) < (1024*1020*1024) and value <= (16*1024*1024):
-
-                if timeout == 0:
-                    c = [value, timeout]
-
-                else:
-                    c = [value, timeout + time.time()]
-
-                if len(key) <= 32:  # constraints for input key_name capped at 32chars
-                    keys[key] = c
-
-            else:
-                print("Error: Memory Limit Exceeded! ")  # error message2
+try:
+    def create(key, value, timeout=0):
+        '''
+        For create operation
+        use function create(key_name, value, timeout_value)
+        Here, the timeout value is optional to use
+        '''
+        if key in keys:
+            print("Error: The Key already exists")  # error message1
 
         else:
-            # error message3
-            print("Error: Invalind key_name!! Key must contain only alphabets!")
+
+            if(key.isalpha()):
+
+                # constraints for file size less than 1.0GB and JSON object value less than 16KB
+                if len(keys) < (1024*1020*1024) and value <= (16*1024*1024):
+
+                    if timeout == 0:
+                        c = [value, timeout]
+
+                    else:
+                        c = [value, timeout + time.time()]
+
+                    if len(key) <= 32:  # constraints for input key_name capped at 32chars
+                        keys[key] = c
+
+                else:
+                    print("Error: Memory Limit Exceeded! ")  # error message2
+
+            else:
+                # error message3
+                print("Error: Invalind key_name!! Key must contain only alphabets!")
+except Exception as e:
+    print(e)
 
 
 def read(key):
     ''' 
-    for read operation of the key
+    For read operation of the key
     use function "read(key_name)" to read any key
     '''
     if key not in keys:
@@ -55,8 +58,8 @@ def read(key):
                 stri = str(key)+":"+str(data[0])
                 return stri
             else:
-                print("Error: Time-To-Live of ", key,
-                      " has been Expired")  # error message5
+                print("Error: Time-To-Live of '", key,
+                      "' has been Expired")  # error message5
         else:
             stri = str(key)+":"+str(data[0])
             return stri
@@ -77,8 +80,8 @@ def delete(key):
                 del keys[key]
                 print("Key Deleted Successfully!!")
             else:
-                print("Error: Time-To-Live of ", key,
-                      " has been expired")  # error message5
+                print("Error: Time-To-Live of '", key,
+                      "' has been expired")  # error message5
         else:
             del keys[key]
             print("Key is successfully deleted!!")
@@ -86,7 +89,7 @@ def delete(key):
 
 def modify(key, value):
     '''
-    for modify operation (modifying the key)
+    For modify operation (modifying the key)
     use function "modify(key_name, new_value)"
     '''
     oper = keys[key]
@@ -102,8 +105,8 @@ def modify(key, value):
                 values.append(oper[1])
                 keys[key] = values
         else:
-            print("Error: Time-To-Live of", key,
-                  "has been expired")  # error message5
+            print("Error: Time-To-Live of '", key,
+                  "' has been expired")  # error message5
     else:
         if key not in keys:
             # error message6
